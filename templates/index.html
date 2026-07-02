@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Sistema de Helpdesk</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+        <style>
+            #formulario {
+                max-width: 420px;
+                margin: 60px auto;
+            }
+
+            #formulario a[role="button"] {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
+            }
+        </style>
+    </head>
+<body>
+    <main class="container">
+        <section id="formulario">
+            <h1>Sistema de Helpdesk</h1>
+                <p>Bem-vindo ao Sistema de Helpdesk</p>
+                <p>Gerencie seus chamados de suporte</p>
+            <p>
+                <a href="{{ url_for('cadastro') }}" role="button">Cadastro</a>
+            </p>
+
+            <p>
+                <a href="{{ url_for('fila') }}" role="button">Ver Filas</a>
+            </p>
+        </section>
+    </main>
+</body>
+</html>

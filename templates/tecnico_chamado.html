@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Sistema de Helpdesk</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+        <style>
+            #fila {
+                max-width: 420px;
+                margin: 60px auto;
+            }
+
+            #fila a[role="button"] {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
+            }
+
+            .chamado-selecao {
+                width: 100%;
+                text-align: center;
+            }
+
+            .chamado-selecao input {
+                transform: scale(1.2);
+                cursor: pointer;
+            }
+
+            tr.chamado-selecionado {
+                background: rgba(193, 18, 31, 0.08);
+            }
+
+            .acoes-chamado {
+                display: flex;
+                gap: 0.75rem;
+                margin-top: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .acoes-chamado button {
+                flex: 1 1 140px;
+            }
+        </style>
+    </head>
+<body>
+    <main class="container">
+        <section id="técnico_chamado">
+            <h1>Fila de Chamados</h1>
+            {% if atendimento %}
+                <table role="grid" id="tabela-chamados">
+                    <thead>
+                        <tr>
+                            <th>Selecionar</th>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Descrição</th>
+                            <th>Prioridade</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for chamado in atendimento %}
+                            <tr data-chamado-id="{{ chamado.id }}">
+                                <td class="chamado-selecao">
+                                    <input type="radio" name="chamado_selecionado" value="{{ chamado.id }}" aria-label="Selecionar chamado {{ chamado.id }}">
+                                </td>
+                                <td>{{ chamado.id }}</td>
+                                <td>{{ chamado.cliente }}</td>
+                                <td>{{ chamado.descricao }}</td>
+                                <td>{{ chamado.prioridade }}</td>
+                                <td>{{ chamado.status }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <form class="acoes-chamado" id="acoes-chamado-form" method="POST">
+                    <button type="submit" id="btn-atender" data-acao="atender" disabled>Atender</button>
+                    <button type="submit" id="btn-concluir" data-acao="concluir" disabled>Concluir</button>
+                    <button type="submit" id="btn-cancelar" data-acao="cancelar" disabled>Cancelar</button>
+                </form>
+                <script>
+                    const radios = document.querySelectorAll('input[name="chamado_selecionado"]');
+                    const formAcoes = document.getElementById('acoes-chamado-form');
+                    const botoes = [
+                        document.getElementById('btn-atender'),
+                        document.getElementById('btn-concluir'),
+                        document.getElementById('btn-cancelar')
+                    ];
+
+                    function atualizarAcoes() {
+                        const selecionado = document.querySelector('input[name="chamado_selecionado"]:checked');
+                        const habilitar = Boolean(selecionado);
+
+                        botoes.forEach((botao) => {
+                            botao.disabled = !habilitar;
+                        });
+
+                        document.querySelectorAll('#tabela-chamados tbody tr').forEach((linha) => {
+                            linha.classList.toggle('chamado-selecionado', linha.dataset.chamadoId === (selecionado ? selecionado.value : ''));
+                        });
+                    }
+
+                    radios.forEach((radio) => {
+                        radio.addEventListener('change', atualizarAcoes);
+                    });
+
+                    formAcoes.addEventListener('submit', (event) => {
+                        const selecionado = document.querySelector('input[name="chamado_selecionado"]:checked');
+                        const acao = event.submitter ? event.submitter.dataset.acao : null;
+
+                        if (!selecionado || !acao) {
+                            event.preventDefault();
+                            return;
+                        }
+
+                        formAcoes.action = `/chamados/${selecionado.value}/${acao}`;
+                    });
+
+                    atualizarAcoes();
+                </script>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

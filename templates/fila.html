@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Sistema de Helpdesk</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+        <style>
+            #fila {
+                max-width: 420px;
+                margin: 60px auto;
+            }
+
+            #fila a[role="button"] {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
+            }
+
+            .atualizacao-status {
+                margin-bottom: 1rem;
+                font-size: 0.95rem;
+                color: var(--pico-muted-color);
+            }
+        </style>
+    </head>
+<body>
+    <main class="container">
+        <section id="fila">
+            <h1>Fila de Chamados</h1>
+            <p class="atualizacao-status" id="status-atualizacao">Atualizando automaticamente.</p>
+            {% if atendimento %}
+                <table role="grid" id="tabela-fila">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Descrição</th>
+                            <th>Prioridade</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-fila-corpo">
+                        {% for chamado in atendimento %}
+                            <tr>
+                                <td>{{ chamado.id }}</td>
+                                <td>{{ chamado.cliente }}</td>
+                                <td>{{ chamado.descricao }}</td>
+                                <td>{{ chamado.prioridade }}</td>
+                                <td>{{ chamado.status }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p id="mensagem-vazia">Nenhum chamado em andamento.</p>
+            {% endif %}
+            <script>
+                const statusAtualizacao = document.getElementById('status-atualizacao');
+
+                function montarLinhas(chamados) {
+                    return chamados.map((chamado) => `
+                        <tr>
+                            <td>${chamado.id}</td>
+                            <td>${chamado.cliente}</td>
+                            <td>${chamado.descricao}</td>
+                            <td>${chamado.prioridade}</td>
+                            <td>${chamado.status}</td>
+                        </tr>
+                    `).join('');
+                }
+
+                async function atualizarFila() {
+                    try {
+                        const resposta = await fetch('{{ url_for("api_chamados") }}', { cache: 'no-store' });
+                        const chamados = await resposta.json();
+                        const tabelaCorpo = document.getElementById('tabela-fila-corpo');
+                        const mensagemVazia = document.getElementById('mensagem-vazia');
+
+                        if (tabelaCorpo) {
+                            tabelaCorpo.innerHTML = montarLinhas(chamados);
+                        } else if (mensagemVazia && chamados.length > 0) {
+                            const tabela = document.createElement('table');
+                            tabela.setAttribute('role', 'grid');
+                            tabela.id = 'tabela-fila';
+                            tabela.innerHTML = `
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Cliente</th>
+                                        <th>Descrição</th>
+                                        <th>Prioridade</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabela-fila-corpo">
+                                    ${montarLinhas(chamados)}
+                                </tbody>
+                            `;
+                            mensagemVazia.replaceWith(tabela);
+                        } else if (mensagemVazia && chamados.length === 0) {
+                            mensagemVazia.textContent = 'Nenhum chamado em andamento.';
+                        }
+
+                        if (statusAtualizacao) {
+                            statusAtualizacao.textContent = `Atualizado agora às ${new Date().toLocaleTimeString('pt-BR')}.`;
+                        }
+                    } catch (erro) {
+                        if (statusAtualizacao) {
+                            statusAtualizacao.textContent = 'Falha ao atualizar a fila.';
+                        }
+                    }
+                }
+
+                atualizarFila();
+                setInterval(atualizarFila, 3000);
+            </script>
+        </section>
+    </main>
+</body>
+</html>

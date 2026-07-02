@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Sistema de Helpdesk</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+        <style>
+            #chamado {
+                max-width: 420px;
+                margin: 60px auto;
+            }
+
+            #chamado a[role="button"] {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
+            }
+
+            .prioridade-group {
+                display: flex;
+                gap: 0.75rem;
+                flex-wrap: wrap;
+            }
+
+            .prioridade-option {
+                flex: 1 1 120px;
+            }
+
+            .prioridade-option input {
+                position: absolute;
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            .prioridade-option label {
+                display: block;
+                width: 100%;
+                margin: 0;
+                text-align: center;
+                cursor: pointer;
+                border: 1px solid var(--pico-form-element-border-color);
+                border-radius: var(--pico-border-radius);
+                background: var(--pico-form-element-background-color);
+                color: var(--pico-color);
+                transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+            }
+
+            .prioridade-option input:checked + label {
+                background: #c1121f;
+                border-color: #c1121f;
+                color: #fff;
+            }
+        </style>
+    </head>
+<body>
+    <main class="container">
+        <section id="chamado">
+            <h1>Abrir Chamado</h1>
+            <form method="POST" action="{{ url_for('cadastro') }}">
+                <label for="cliente">Cliente:</label>
+                <input type="text" id="cliente" name="cliente" required>
+
+                <label for="descricao">Descrição:</label>
+                <input type="text" id="descricao" name="descricao" required>
+
+                <label for="prioridade">Prioridade:</label>
+                <div class="prioridade-group" role="radiogroup" aria-label="Prioridade">
+                    <div class="prioridade-option">
+                        <input type="radio" id="prioridade-baixa" name="prioridade" value="Baixa" required>
+                        <label for="prioridade-baixa">Baixa</label>
+                    </div>
+                    <div class="prioridade-option">
+                        <input type="radio" id="prioridade-media" name="prioridade" value="Média" required>
+                        <label for="prioridade-media">Média</label>
+                    </div>
+                    <div class="prioridade-option">
+                        <input type="radio" id="prioridade-alta" name="prioridade" value="Alta" required>
+                        <label for="prioridade-alta">Alta</label>
+                    </div>
+                </div>
+                <br><br>
+
+                <button type="submit">Abrir Chamado</button>
+            </form>
+        </section>
+    </main>
+</body>
