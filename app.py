@@ -63,6 +63,11 @@ def fila():
 	return render_template('fila.html', atendimento=atendimento)
 
 
+@app.route('/voltar')
+def voltar():
+	return redirect(url_for('index'))
+
+
 @app.route('/api/chamados')
 def api_chamados():
 	return jsonify(list_chamados() or [])

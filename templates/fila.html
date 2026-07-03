@@ -55,6 +55,10 @@
             {% else %}
                 <p id="mensagem-vazia">Nenhum chamado em andamento.</p>
             {% endif %}
+
+            <br><br>
+            <a href="{{ url_for('voltar') }}" role="button">Voltar</a>
+
             <script>
                 const statusAtualizacao = document.getElementById('status-atualizacao');
 
