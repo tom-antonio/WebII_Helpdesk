@@ -4,33 +4,40 @@
         <meta charset="UTF-8">
         <title>Sistema de Helpdesk</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/helpdesk.css') }}">
         <style>
-            #fila {
-                max-width: 420px;
-                margin: 60px auto;
-            }
-
-            #fila a[role="button"] {
-                display: block;
+            #tabela-fila {
                 width: 100%;
-                box-sizing: border-box;
-                text-align: center;
             }
 
-            .atualizacao-status {
-                margin-bottom: 1rem;
-                font-size: 0.95rem;
-                color: var(--pico-muted-color);
+            #tabela-fila th:nth-child(3),
+            #tabela-fila td:nth-child(3) {
+                width: 44%;
+            }
+
+            #tabela-fila th:nth-child(2),
+            #tabela-fila td:nth-child(2) {
+                width: 18%;
+            }
+
+            #tabela-fila td:nth-child(3) {
+                word-break: break-word;
+            }
+
+            #tabela-fila th:nth-child(5),
+            #tabela-fila td:nth-child(5) {
+                width: 10rem;
+                white-space: nowrap;
             }
         </style>
     </head>
 <body>
     <main class="container">
-        <section id="fila">
+        <section id="fila" class="page-panel page-panel--wide">
             <h1>Fila de Chamados</h1>
-            <p class="atualizacao-status" id="status-atualizacao">Atualizando automaticamente.</p>
+            <p class="note-muted" id="status-atualizacao">Atualizando automaticamente.</p>
             {% if atendimento %}
-                <table role="grid" id="tabela-fila">
+                <table role="grid" id="tabela-fila" class="helpdesk-table">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -57,7 +64,7 @@
             {% endif %}
 
             <br><br>
-            <a href="{{ url_for('voltar') }}" role="button">Voltar</a>
+            <a href="{{ url_for('voltar') }}" role="button" class="full-button">Voltar</a>
 
             <script>
                 const statusAtualizacao = document.getElementById('status-atualizacao');

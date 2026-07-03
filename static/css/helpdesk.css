@@ -1,0 +1,77 @@
+.page-panel {
+    padding: 0 1rem;
+}
+
+.page-panel--narrow {
+    max-width: 420px;
+    margin: 60px auto;
+}
+
+.page-panel--wide {
+    max-width: 1200px;
+    margin: 40px auto;
+}
+
+.full-button {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.helpdesk-table {
+    width: 100%;
+    font-size: 1.05rem;
+    table-layout: fixed;
+}
+
+.helpdesk-table th,
+.helpdesk-table td {
+    padding: 1rem 1.1rem;
+    vertical-align: middle;
+}
+
+.helpdesk-table thead th {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.selection-cell {
+    width: 4.5rem;
+    text-align: center;
+}
+
+.selection-cell input {
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.row-selected {
+    background: rgba(193, 18, 31, 0.08);
+}
+
+.actions-row {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.actions-row button {
+    flex: 1 1 140px;
+}
+
+.note-muted {
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    color: var(--pico-muted-color);
+}
+
+.centered-button-block {
+    max-width: 360px;
+    margin: 1.5rem auto 0;
+}
+
+.centered-button-block .full-button {
+    width: 100%;
+}

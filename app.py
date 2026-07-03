@@ -8,6 +8,11 @@ app.secret_key = 'webii-helpdesk-secret-key'
 
 @app.route('/')
 def index():
+	return render_template('login.html')
+
+
+@app.route('/clientes')
+def clientes():
 	return render_template('index.html')
 
 
@@ -46,7 +51,7 @@ def cadastro():
 		return redirect(url_for('chamado'))
 
 	create_chamado(cliente, descricao, prioridade)
-	return redirect(url_for('index'))
+	return redirect(url_for('clientes'))
 
 
 @app.route('/consulta')
@@ -65,7 +70,12 @@ def fila():
 
 @app.route('/voltar')
 def voltar():
-	return redirect(url_for('index'))
+	return redirect(url_for('clientes'))
+
+
+@app.route('/voltar2')
+def voltar2():
+	return redirect(url_for('login'))
 
 
 @app.route('/api/chamados')

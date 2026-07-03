@@ -4,51 +4,66 @@
         <meta charset="UTF-8">
         <title>Sistema de Helpdesk</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/helpdesk.css') }}">
         <style>
-            #fila {
-                max-width: 420px;
-                margin: 60px auto;
+            .page-panel--wide {
+                max-width: 1400px;
             }
 
-            #fila a[role="button"] {
-                display: block;
-                width: 100%;
-                box-sizing: border-box;
+            #tabela-chamados th:nth-child(1),
+            #tabela-chamados td:nth-child(1) {
+                width: 5rem;
                 text-align: center;
             }
 
-            .chamado-selecao {
-                width: 100%;
+            #tabela-chamados th:nth-child(2),
+            #tabela-chamados td:nth-child(2) {
+                width: 6rem;
                 text-align: center;
             }
 
-            .chamado-selecao input {
-                transform: scale(1.2);
-                cursor: pointer;
+            #tabela-chamados th:nth-child(3),
+            #tabela-chamados td:nth-child(3) {
+                width: 22%;
             }
 
-            tr.chamado-selecionado {
-                background: rgba(193, 18, 31, 0.08);
+            #tabela-chamados th:nth-child(4),
+            #tabela-chamados td:nth-child(4) {
+                width: 44%;
             }
 
-            .acoes-chamado {
-                display: flex;
-                gap: 0.75rem;
-                margin-top: 1rem;
-                flex-wrap: wrap;
+            #tabela-chamados td:nth-child(4) {
+                word-break: break-word;
             }
 
-            .acoes-chamado button {
-                flex: 1 1 140px;
+            #tabela-chamados th:nth-child(5),
+            #tabela-chamados td:nth-child(5) {
+                width: 12rem;
+                white-space: nowrap;
+            }
+
+            #tabela-chamados th:nth-child(6),
+            #tabela-chamados td:nth-child(6) {
+                width: 14rem;
+                white-space: nowrap;
+            }
+
+            #tabela-chamados th,
+            #tabela-chamados td {
+                padding: 1.15rem 1.4rem;
+            }
+
+            #tabela-chamados {
+                font-size: 1.08rem;
             }
         </style>
     </head>
 <body>
     <main class="container">
-        <section id="técnico_chamado">
+        <section id="técnico_chamado" class="page-panel page-panel--wide">
             <h1>Fila de Chamados</h1>
             {% if atendimento %}
-                <table role="grid" id="tabela-chamados">
+                <table role="grid" id="tabela-chamados" class="helpdesk-table">
                     <thead>
                         <tr>
                             <th>Selecionar</th>
@@ -62,7 +77,7 @@
                     <tbody>
                         {% for chamado in atendimento %}
                             <tr data-chamado-id="{{ chamado.id }}">
-                                <td class="chamado-selecao">
+                                <td class="selection-cell">
                                     <input type="radio" name="chamado_selecionado" value="{{ chamado.id }}" aria-label="Selecionar chamado {{ chamado.id }}">
                                 </td>
                                 <td>{{ chamado.id }}</td>
@@ -74,7 +89,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <form class="acoes-chamado" id="acoes-chamado-form" method="POST">
+                <form class="actions-row" id="acoes-chamado-form" method="POST">
                     <button type="submit" id="btn-atender" data-acao="atender" disabled>Atender</button>
                     <button type="submit" id="btn-concluir" data-acao="concluir" disabled>Concluir</button>
                     <button type="submit" id="btn-cancelar" data-acao="cancelar" disabled>Cancelar</button>
@@ -97,7 +112,7 @@
                         });
 
                         document.querySelectorAll('#tabela-chamados tbody tr').forEach((linha) => {
-                            linha.classList.toggle('chamado-selecionado', linha.dataset.chamadoId === (selecionado ? selecionado.value : ''));
+                            linha.classList.toggle('row-selected', linha.dataset.chamadoId === (selecionado ? selecionado.value : ''));
                         });
                     }
 
@@ -120,6 +135,10 @@
                     atualizarAcoes();
                 </script>
             {% endif %}
+            
+            <p class="centered-button-block">
+                <a href="{{ url_for('voltar2') }}" role="button" class="full-button">Voltar</a>
+            </p>
         </section>
     </main>
 </body>
